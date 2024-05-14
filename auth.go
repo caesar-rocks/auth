@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"errors"
+	"net/http"
 	"reflect"
 	"strings"
 
@@ -26,7 +27,6 @@ type Auth struct {
 type AuthCfg struct {
 	Key             string
 	MaxAge          int
-	IsProd          bool
 	SocialProviders *map[string]SocialAuthProvider
 	UserProvider    func(ctx context.Context, userID any) (any, error)
 	RedirectTo      string
@@ -75,7 +75,8 @@ func NewAuth(cfg *AuthCfg) *Auth {
 	store.MaxAge(cfg.MaxAge)
 	store.Options.Path = "/"
 	store.Options.HttpOnly = true
-	store.Options.Secure = cfg.IsProd
+	store.Options.Secure = true
+	store.Options.SameSite = http.SameSiteStrictMode
 
 	auth := &Auth{
 		AuthCfg: cfg,
