@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
+	"time"
 
 	caesar "github.com/caesar-rocks/core"
 	"github.com/gorilla/sessions"
@@ -27,6 +28,8 @@ type Auth struct {
 type AuthCfg struct {
 	Key             string
 	MaxAge          int
+	JWTSigningKey   []byte
+	JWTExpiration   time.Duration
 	SocialProviders *map[string]SocialAuthProvider
 	UserProvider    func(ctx context.Context, userID any) (any, error)
 	RedirectTo      string
@@ -83,7 +86,7 @@ func NewAuth(cfg *AuthCfg) *Auth {
 		store:   store,
 	}
 
-	if *cfg.SocialProviders != nil {
+	if cfg.SocialProviders != nil {
 		auth.Social = NewSocialAuth(store, *cfg.SocialProviders)
 	}
 
@@ -91,39 +94,26 @@ func NewAuth(cfg *AuthCfg) *Auth {
 }
 
 func (auth *Auth) AuthenticateRequest(ctx *caesar.CaesarCtx) error {
-	session, _ := auth.store.Get(ctx.Request, SESSION_NAME)
-	userID := session.Values[SESSION_VALUE_KEY]
-
-	if userID == nil {
-		return errors.New("user not authenticated")
+	authorizationHeader := ctx.Request.Header.Get("Authorization")
+	if authorizationHeader != "" {
+		return auth.authenticateRequestThroughJWT(ctx, authorizationHeader)
 	}
-
-	user, err := auth.UserProvider(ctx.Request.Context(), userID)
-	if err != nil {
-		return err
-	}
-
-	ctx.Request = ctx.Request.WithContext(
-		context.WithValue(ctx.Request.Context(),
-			USER_CONTEXT_KEY, user,
-		),
-	)
-
-	return nil
+	return auth.authenticateRequestThroughSession(ctx)
 }
 
 // SilentMiddleware is a middleware that injects the user into the context.
 func (auth *Auth) SilentMiddleware(ctx *caesar.CaesarCtx) error {
 	auth.AuthenticateRequest(ctx)
-
+	ctx.Next()
 	return nil
 }
 
 func (auth *Auth) AuthMiddleware(ctx *caesar.CaesarCtx) error {
 	err := auth.AuthenticateRequest(ctx)
 	if err != nil {
-		ctx.Redirect(auth.RedirectTo)
+		return ctx.Redirect(auth.RedirectTo)
 	}
+	ctx.Next()
 
 	return nil
 }
