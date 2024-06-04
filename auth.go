@@ -27,7 +27,7 @@ type Auth struct {
 
 type AuthCfg struct {
 	Key             string
-	MaxAge          int
+	MaxAge          time.Duration
 	JWTSigningKey   []byte
 	JWTExpiration   time.Duration
 	SocialProviders *map[string]SocialAuthProvider
@@ -75,7 +75,7 @@ func (a *Auth) Authenticate(ctx *caesar.CaesarCtx, user any) error {
 
 func NewAuth(cfg *AuthCfg) *Auth {
 	store := sessions.NewCookieStore([]byte(cfg.Key))
-	store.MaxAge(cfg.MaxAge)
+	store.MaxAge(int(cfg.MaxAge))
 	store.Options.Path = "/"
 	store.Options.HttpOnly = true
 	store.Options.Secure = true

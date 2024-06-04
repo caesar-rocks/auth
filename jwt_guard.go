@@ -75,19 +75,19 @@ func parseAndValidateToken(tokenString string, signingKey any) (*jwt.Token, erro
 	return token, nil
 }
 
-func extractUserIDFromClaims(claims jwt.Claims) (string, error) {
+func extractUserIDFromClaims(claims jwt.Claims) (any, error) {
 	mapClaims, ok := claims.(jwt.MapClaims)
 	if !ok {
 		return "", errors.New("invalid token claims")
 	}
-	userID, ok := mapClaims["user_id"].(string)
+	userID, ok := mapClaims["user_id"]
 	if !ok {
 		return "", errors.New("user_id not found in token claims")
 	}
 	return userID, nil
 }
 
-func (auth *Auth) setUserContext(ctx *caesar.CaesarCtx, userID string) error {
+func (auth *Auth) setUserContext(ctx *caesar.CaesarCtx, userID any) error {
 	user, err := auth.UserProvider(ctx.Request.Context(), userID)
 	if err != nil {
 		return err
