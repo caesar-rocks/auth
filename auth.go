@@ -79,7 +79,7 @@ func NewAuth(cfg *AuthCfg) *Auth {
 	store.Options.Path = "/"
 	store.Options.HttpOnly = true
 	store.Options.Secure = true
-	store.Options.SameSite = http.SameSiteStrictMode
+	store.Options.SameSite = http.SameSiteLaxMode
 
 	auth := &Auth{
 		AuthCfg: cfg,
@@ -109,10 +109,10 @@ func (auth *Auth) SilentMiddleware(ctx *caesar.CaesarCtx) error {
 }
 
 func (auth *Auth) AuthMiddleware(ctx *caesar.CaesarCtx) error {
-	err := auth.AuthenticateRequest(ctx)
-	if err != nil {
+	if err := auth.AuthenticateRequest(ctx); err != nil {
 		return ctx.Redirect(auth.RedirectTo)
 	}
+
 	ctx.Next()
 
 	return nil
