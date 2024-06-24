@@ -68,7 +68,7 @@ func (s *SocialAuth) Use(provider string) *SocialAuthProvider {
 	return nil
 }
 
-func (p *SocialAuthProvider) Redirect(ctx *core.CaesarCtx) error {
+func (p *SocialAuthProvider) Redirect(ctx *core.Context) error {
 	r := ctx.Request.WithContext(
 		context.WithValue(
 			ctx.Request.Context(),
@@ -91,7 +91,7 @@ func (p *SocialAuthProvider) Redirect(ctx *core.CaesarCtx) error {
 	return nil
 }
 
-func (p *SocialAuthProvider) Callback(ctx *core.CaesarCtx) (*goth.User, error) {
+func (p *SocialAuthProvider) Callback(ctx *core.Context) (*goth.User, error) {
 	r := ctx.Request.WithContext(
 		context.WithValue(
 			ctx.Request.Context(),
