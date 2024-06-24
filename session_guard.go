@@ -7,7 +7,7 @@ import (
 	caesar "github.com/caesar-rocks/core"
 )
 
-func (auth *Auth) authenticateRequestThroughSession(ctx *caesar.CaesarCtx) error {
+func (auth *Auth) authenticateRequestThroughSession(ctx *caesar.Context) error {
 	// Try to retrieve the user ID from the session.
 	session, _ := auth.store.Get(ctx.Request, SESSION_NAME)
 	userID := session.Values[SESSION_VALUE_KEY]

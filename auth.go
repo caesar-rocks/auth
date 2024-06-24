@@ -53,7 +53,7 @@ func retrievePrimaryKey(model any) any {
 
 // Authenticate is a method that sets the user in the session.
 // The session consists in a http.Cookie that is set in the client's browser.
-func (a *Auth) Authenticate(ctx *caesar.CaesarCtx, user any) error {
+func (a *Auth) Authenticate(ctx *caesar.Context, user any) error {
 	session, err := a.store.Get(ctx.Request, SESSION_NAME)
 	if err != nil {
 		return err
@@ -93,7 +93,7 @@ func NewAuth(cfg *AuthCfg) *Auth {
 	return auth
 }
 
-func (auth *Auth) AuthenticateRequest(ctx *caesar.CaesarCtx) error {
+func (auth *Auth) AuthenticateRequest(ctx *caesar.Context) error {
 	authorizationHeader := ctx.Request.Header.Get("Authorization")
 	if authorizationHeader != "" {
 		return auth.authenticateRequestThroughJWT(ctx, authorizationHeader)
@@ -102,13 +102,13 @@ func (auth *Auth) AuthenticateRequest(ctx *caesar.CaesarCtx) error {
 }
 
 // SilentMiddleware is a middleware that injects the user into the context.
-func (auth *Auth) SilentMiddleware(ctx *caesar.CaesarCtx) error {
+func (auth *Auth) SilentMiddleware(ctx *caesar.Context) error {
 	auth.AuthenticateRequest(ctx)
 	ctx.Next()
 	return nil
 }
 
-func (auth *Auth) AuthMiddleware(ctx *caesar.CaesarCtx) error {
+func (auth *Auth) AuthMiddleware(ctx *caesar.Context) error {
 	if err := auth.AuthenticateRequest(ctx); err != nil {
 		return ctx.Redirect(auth.RedirectTo)
 	}
@@ -119,7 +119,7 @@ func (auth *Auth) AuthMiddleware(ctx *caesar.CaesarCtx) error {
 }
 
 // RetrieveUserFromCtx is a function that retrieves the user from the context.
-func RetrieveUserFromCtx[T any](ctx *caesar.CaesarCtx) (*T, error) {
+func RetrieveUserFromCtx[T any](ctx *caesar.Context) (*T, error) {
 	ctxValue := ctx.Request.Context().Value(USER_CONTEXT_KEY)
 	if ctxValue == nil {
 		return nil, errors.New("user not found")
@@ -133,7 +133,7 @@ func RetrieveUserFromCtx[T any](ctx *caesar.CaesarCtx) (*T, error) {
 }
 
 // SignOut is a method that removes the user from the session.
-func (auth *Auth) SignOut(ctx *caesar.CaesarCtx) error {
+func (auth *Auth) SignOut(ctx *caesar.Context) error {
 	session, err := auth.store.Get(ctx.Request, SESSION_NAME)
 	if err != nil {
 		return err

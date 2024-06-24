@@ -3,7 +3,7 @@ module github.com/caesar-rocks/auth
 go 1.22.2
 
 require (
-	github.com/caesar-rocks/core v0.0.2
+	github.com/caesar-rocks/core v0.0.8
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/gorilla/sessions v1.2.2
 	github.com/markbates/goth v1.79.0

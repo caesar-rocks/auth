@@ -35,7 +35,7 @@ func TestAuthenticateRequest(t *testing.T) {
 
 	request := httptest.NewRequest(http.MethodGet, "/", nil)
 	responseWriter := httptest.NewRecorder()
-	ctx := &caesar.CaesarCtx{Request: request, ResponseWriter: responseWriter}
+	ctx := &caesar.Context{Request: request, ResponseWriter: responseWriter}
 
 	auth := NewAuth(&AuthCfg{
 		JWTSigningKey: []byte("secret"),

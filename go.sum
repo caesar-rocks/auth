@@ -4,8 +4,8 @@ cloud.google.com/go/compute/metadata v0.2.3 h1:mg4jlk7mCAj6xXp9UJ4fjI9VUI5rubuGB
 cloud.google.com/go/compute/metadata v0.2.3/go.mod h1:VAV5nSsACxMJvgaAuX6Pk2AawlZn8kiOGuCv6gTkwuA=
 github.com/a-h/templ v0.2.697 h1:OILxtWvD0NRJaoCOiZCopRDPW8paroKlGsrAiHLykNE=
 github.com/a-h/templ v0.2.697/go.mod h1:5cqsugkq9IerRNucNsI4DEamdHPsoGMQy99DzydLhM8=
-github.com/caesar-rocks/core v0.0.2 h1:AqswxsUzs8+akb50E+XkZeAMYjrnY8qEeuM0tSThL8o=
-github.com/caesar-rocks/core v0.0.2/go.mod h1:OPyrJ2VSmc5nHncPwzIJtTma1j6yNNFVKY151csfzeY=
+github.com/caesar-rocks/core v0.0.8 h1:/PbQSaIz+s4aw4k0PSbTVWxbreqO4L1m6fldsLnxiY0=
+github.com/caesar-rocks/core v0.0.8/go.mod h1:OPyrJ2VSmc5nHncPwzIJtTma1j6yNNFVKY151csfzeY=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gabriel-vasile/mimetype v1.4.3 h1:in2uUcidCuFcDKtdcBxlR0rJ1+fsokWf+uqxgUFjbI0=

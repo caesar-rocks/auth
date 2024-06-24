@@ -31,7 +31,7 @@ func (auth *Auth) GenerateJWT(user any) (string, error) {
 	return tokenString, nil
 }
 
-func (auth *Auth) authenticateRequestThroughJWT(ctx *caesar.CaesarCtx, authorizationHeader string) error {
+func (auth *Auth) authenticateRequestThroughJWT(ctx *caesar.Context, authorizationHeader string) error {
 	// Split the authorization header to get the token
 	tokenString, err := extractTokenFromHeader(authorizationHeader)
 	if err != nil {
@@ -87,7 +87,7 @@ func extractUserIDFromClaims(claims jwt.Claims) (any, error) {
 	return userID, nil
 }
 
-func (auth *Auth) setUserContext(ctx *caesar.CaesarCtx, userID any) error {
+func (auth *Auth) setUserContext(ctx *caesar.Context, userID any) error {
 	user, err := auth.UserProvider(ctx.Request.Context(), userID)
 	if err != nil {
 		return err
