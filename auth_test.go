@@ -11,12 +11,12 @@ import (
 )
 
 type user struct {
-	ID string `bun:"id,pk"`
+	ID string `gorm:"primaryKey"`
 }
 
 func TestRetrievePrimaryKey(t *testing.T) {
 	type article struct {
-		Identifier int `bun:"id,pk,autoincrement"`
+		Identifier int `gorm:"primaryKey"`
 	}
 
 	pk := retrievePrimaryKey(user{ID: "la-jeune-parque"})

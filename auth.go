@@ -41,9 +41,9 @@ func retrievePrimaryKey(model any) any {
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
 		value := field.Interface()
-		tag := v.Type().Field(i).Tag.Get("bun")
+		tag := v.Type().Field(i).Tag.Get("gorm")
 
-		if strings.Contains(tag, "pk") {
+		if strings.Contains(tag, "primaryKey") {
 			return value
 		}
 	}
